@@ -48,10 +48,17 @@ class ToolExposureReport:
         return len(self.unnecessary_granted) / len(self.granted_tools)
 
 
+def _strip_pattern(entry: str) -> str:
+    idx = entry.find("(")
+    if idx == -1:
+        return entry
+    return entry[:idx]
+
+
 def _resolve_granted(tools: Optional[Iterable[str]]) -> FrozenSet[str]:
     if tools is None:
         return KNOWN_TOOLS
-    return frozenset(tools)
+    return frozenset(_strip_pattern(entry) for entry in tools)
 
 
 def assess_tool_exposure(

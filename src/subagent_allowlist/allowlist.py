@@ -4,6 +4,7 @@ from typing import Tuple
 
 from .baseline import AgentDefinition, build_baseline_agent
 from .observe import DANGEROUS_TOOLS, KNOWN_TOOLS, REQUIRED_TOOLS
+from .patterns import SCOPED_AGENT_TOOLS
 
 # The explicit allowlist a file-explorer subagent needs and nothing more.
 # Ordered so serialized configs diff cleanly across runs.
@@ -16,6 +17,16 @@ def build_locked_down_agent() -> AgentDefinition:
         description=baseline.description,
         prompt=baseline.prompt,
         tools=LOCKED_DOWN_AGENT_TOOLS,
+        model=baseline.model,
+    )
+
+
+def build_scoped_agent() -> AgentDefinition:
+    baseline = build_baseline_agent()
+    return AgentDefinition(
+        description=baseline.description,
+        prompt=baseline.prompt,
+        tools=SCOPED_AGENT_TOOLS,
         model=baseline.model,
     )
 

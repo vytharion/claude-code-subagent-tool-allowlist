@@ -3,6 +3,7 @@ from __future__ import annotations
 from .allowlist import (
     LOCKED_DOWN_AGENT_TOOLS,
     build_locked_down_agent,
+    build_scoped_agent,
     validate_allowlist,
 )
 from .baseline import BASELINE_AGENT_NAME, AgentDefinition, build_baseline_agent
@@ -14,6 +15,18 @@ from .observe import (
     assess_tool_exposure,
     summarize_report,
 )
+from .patterns import (
+    SAFE_BASH_COMMANDS,
+    SCOPED_AGENT_TOOLS,
+    WORKSPACE_SCOPE_PATTERN,
+    PatternedTool,
+    build_scoped_bash_commands,
+    build_scoped_file_tools,
+    parse_tool_name,
+    parse_tool_pattern,
+    render_patterned_tool,
+    validate_patterned_allowlist,
+)
 from .spawn import build_agent_options, run_baseline_subagent
 
 __all__ = [
@@ -22,13 +35,24 @@ __all__ = [
     "DANGEROUS_TOOLS",
     "KNOWN_TOOLS",
     "LOCKED_DOWN_AGENT_TOOLS",
+    "PatternedTool",
     "REQUIRED_TOOLS",
+    "SAFE_BASH_COMMANDS",
+    "SCOPED_AGENT_TOOLS",
     "ToolExposureReport",
+    "WORKSPACE_SCOPE_PATTERN",
     "assess_tool_exposure",
     "build_agent_options",
     "build_baseline_agent",
     "build_locked_down_agent",
+    "build_scoped_agent",
+    "build_scoped_bash_commands",
+    "build_scoped_file_tools",
+    "parse_tool_name",
+    "parse_tool_pattern",
+    "render_patterned_tool",
     "run_baseline_subagent",
     "summarize_report",
     "validate_allowlist",
+    "validate_patterned_allowlist",
 ]
