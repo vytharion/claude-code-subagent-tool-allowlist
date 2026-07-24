@@ -13,6 +13,7 @@ from .denylist import (
     DeniedInvocationError,
     DenylistViolation,
     assert_denylist_safe,
+    guard_message,
     guard_tool_use,
     is_denied_bash,
     is_denied_path,
@@ -39,7 +40,7 @@ from .patterns import (
     render_patterned_tool,
     validate_patterned_allowlist,
 )
-from .spawn import build_agent_options, run_baseline_subagent
+from .spawn import build_agent_options, run_baseline_subagent, run_guarded_subagent
 
 __all__ = [
     "AgentDefinition",
@@ -65,6 +66,7 @@ __all__ = [
     "build_scoped_agent",
     "build_scoped_bash_commands",
     "build_scoped_file_tools",
+    "guard_message",
     "guard_tool_use",
     "is_denied_bash",
     "is_denied_path",
@@ -73,6 +75,7 @@ __all__ = [
     "parse_tool_pattern",
     "render_patterned_tool",
     "run_baseline_subagent",
+    "run_guarded_subagent",
     "scan_allowlist_for_denied_entries",
     "summarize_report",
     "validate_allowlist",

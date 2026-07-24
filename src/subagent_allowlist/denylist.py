@@ -3,7 +3,7 @@ from __future__ import annotations
 import fnmatch
 import re
 from dataclasses import dataclass
-from typing import FrozenSet, Iterable, Tuple
+from typing import Any, FrozenSet, Iterable, Mapping, Tuple
 
 from .patterns import parse_tool_name, parse_tool_pattern
 
@@ -121,3 +121,34 @@ def assert_denylist_safe(tools: Iterable[str]) -> None:
         return
     rendered = "; ".join(f"{v.entry} — {v.reason}" for v in violations)
     raise ValueError(f"denylist violations in allowlist: {rendered}")
+
+
+# Argument-key hints per tool. The SDK routes each tool's input through a
+# tool-specific schema, so Bash carries "command" while file tools carry a
+# path under one of several field names — check them in order.
+_BASH_ARG_KEYS: Tuple[str, ...] = ("command",)
+_PATH_ARG_KEYS: Tuple[str, ...] = (
+    "file_path",
+    "notebook_path",
+    "path",
+    "pattern",
+)
+
+
+def _pick_argument(tool_name: str, payload: Mapping[str, Any]) -> str:
+    keys = _BASH_ARG_KEYS if tool_name == "Bash" else _PATH_ARG_KEYS
+    for key in keys:
+        value = payload.get(key)
+        if value is not None:
+            return str(value)
+    return ""
+
+
+def guard_message(message: Any) -> None:
+    if not isinstance(message, Mapping):
+        return
+    if message.get("type") != "tool_use":
+        return
+    tool_name = str(message.get("name", ""))
+    payload = message.get("input") or {}
+    guard_tool_use(tool_name, _pick_argument(tool_name, payload))
