@@ -9,7 +9,10 @@ from .denylist import guard_message
 QueryFn = Callable[..., AsyncIterator[Any]]
 
 
-def build_agent_options(agent: AgentDefinition) -> Dict[str, Any]:
+def build_agent_options(
+    agent: AgentDefinition,
+    name: str = BASELINE_AGENT_NAME,
+) -> Dict[str, Any]:
     definition: Dict[str, Any] = {
         "description": agent.description,
         "prompt": agent.prompt,
@@ -17,7 +20,7 @@ def build_agent_options(agent: AgentDefinition) -> Dict[str, Any]:
     }
     if agent.tools is not None:
         definition["tools"] = list(agent.tools)
-    return {"agents": {BASELINE_AGENT_NAME: definition}}
+    return {"agents": {name: definition}}
 
 
 async def run_baseline_subagent(
